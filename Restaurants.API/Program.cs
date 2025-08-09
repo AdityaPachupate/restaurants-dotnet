@@ -2,25 +2,21 @@ using Restaurants.Applications.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
 using Serilog;
+using Serilog.Formatting.Compact;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-
 builder.Services.AddSwaggerGen();
+
+new CompactJsonFormatter();
 
 builder.Services.AddInfrastucture(builder.Configuration);
 builder.Services.AddApplication();
-builder.Host.UseSerilog((Context, configuration) =>
-    configuration
-    .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-    .MinimumLevel.Override("Microsoft.EntityFrameworkCore", Serilog.Events.LogEventLevel.Information)
-    .WriteTo.Console(outputTemplate: "[{Timestamp:dd-MM-HH:mm:ss} {Level:u3}] |{SourceContext}|{NewLine} {Message:lj}{NewLine}{Exception}")
-);
+builder.Host.UseSerilog((Context, configuration) =>configuration.ReadFrom.Configuration(Context.Configuration));
 
 var app = builder.Build();
 
