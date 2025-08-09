@@ -1,11 +1,10 @@
 using System;
-using System.ComponentModel.DataAnnotations;
+using MediatR;
 
-namespace Restaurants.Applications.Restaurants.DTO;
+namespace Restaurants.Applications.Restaurants.Commands.CreateRestaurants;
 
-public class CreateRestaurantDto
+public class CreateRestaurantCommand:IRequest<int>
 {
-
     public string Name { get; set; } = default!;
     public string Description { get; set; } = default!;
     public string Category { get; set; } = default!;
@@ -15,6 +14,4 @@ public class CreateRestaurantDto
     public string? City { get; set; }
     public string? Street { get; set; }
     public string? PostalCode { get; set; }
-
-
 }

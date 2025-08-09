@@ -35,8 +35,21 @@ namespace Restaurants.Infrastructure.Repositories
                 .Include(r => r.Dishes)
                 .Include(r => r.Address)
                 .FirstOrDefaultAsync(r => r.Id == id);
-            
+
             return restaurant;
+        }
+
+        public async Task DeleteRestaurant(Restaurant restaurant)
+        {
+
+            dbContext.Restaurants.Remove(restaurant);
+            await dbContext.SaveChangesAsync();
+
+        }
+
+        public async Task SaveChanges()
+        {
+            await dbContext.SaveChangesAsync();
         }
     }
 }
