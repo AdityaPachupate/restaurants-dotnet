@@ -1,6 +1,7 @@
 ﻿namespace Restaurants.Applications.Restaurants.Commands.UpdateRestaurant
 {
     using AutoMapper;
+    using global::Restaurants.Domain.Exceptions;
     using global::Restaurants.Domain.Repositories;
     using MediatR;
     using Microsoft.Extensions.Logging;
@@ -11,16 +12,16 @@
         IRestaurantsRepository restaurantRepository,
         IMapper mapper
         )
-        : IRequestHandler<UpdateRestaurantCommand, bool>
+        : IRequestHandler<UpdateRestaurantCommand>
     {
-        public async Task<bool> Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
+        public async Task Handle(UpdateRestaurantCommand request, CancellationToken cancellationToken)
         {
             logger.LogInformation("Updating restaurant with Id: {Id}", request.Id);
             var restaurant = await restaurantRepository.GetRestaurantByIdAsync(request.Id);
             if (restaurant is null)
             {
                 logger.LogWarning("Restaurant with Id: {Id} not found", request.Id);
-                return false;
+                throw new NotFoundException($"Restaurant with Id {request.Id} not found.");
             }
 
             // Update restaurant properties
@@ -30,7 +31,7 @@
             // Save changes to the repository
             await restaurantRepository.SaveChanges();
             logger.LogInformation("Restaurant with Id: {Id} updated successfully", request.Id);
-            return true;
+           
         }
     }
 }

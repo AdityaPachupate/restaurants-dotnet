@@ -1,3 +1,4 @@
+using Restaurants.API.Middlewares;
 using Restaurants.Applications.Extensions;
 using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
@@ -18,11 +19,16 @@ builder.Services.AddInfrastucture(builder.Configuration);
 builder.Services.AddApplication();
 builder.Host.UseSerilog((Context, configuration) =>configuration.ReadFrom.Configuration(Context.Configuration));
 
+builder.Services.AddScoped<ErrorHandlingMiddleware>();
+
 var app = builder.Build();
 
 var scope = app.Services.CreateScope();
 var seeder = scope.ServiceProvider.GetRequiredService<IRestaurantSeeder>();
 await seeder.seed();
+
+
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

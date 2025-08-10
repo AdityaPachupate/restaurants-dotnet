@@ -23,7 +23,6 @@
         public async Task<IActionResult> GetRestaurantsById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));
-            if (restaurant is null) return NotFound();
             return Ok(restaurant);
         }
 
@@ -37,10 +36,7 @@
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteRestaurant([FromRoute] int id)
         {
-            var isDeleted = await mediator.Send(new DeleteRestaurantCommand(id));
-
-            if (isDeleted) return NoContent();
-
+            await mediator.Send(new DeleteRestaurantCommand(id));
             return NotFound();
         }
 
@@ -48,11 +44,7 @@
         public async Task<IActionResult> UpdateRestaurant([FromRoute] int id, [FromBody] UpdateRestaurantCommand updateRestaurantCommand)
         {
             updateRestaurantCommand.Id = id; // Set the Id for the command
-            var isUpdated = await mediator.Send(updateRestaurantCommand);
-            if(isUpdated)
-            {
-                return NoContent();
-            }
+            await mediator.Send(updateRestaurantCommand);
             return NotFound();
         }
     }
