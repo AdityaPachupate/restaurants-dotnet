@@ -20,6 +20,7 @@ builder.Services.AddApplication();
 builder.Host.UseSerilog((Context, configuration) =>configuration.ReadFrom.Configuration(Context.Configuration));
 
 builder.Services.AddScoped<ErrorHandlingMiddleware>();
+builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
 
 var app = builder.Build();
 
@@ -29,6 +30,7 @@ await seeder.seed();
 
 
 app.UseMiddleware<ErrorHandlingMiddleware>();
+app.UseMiddleware<RequestTimeLoggingMiddleware>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
