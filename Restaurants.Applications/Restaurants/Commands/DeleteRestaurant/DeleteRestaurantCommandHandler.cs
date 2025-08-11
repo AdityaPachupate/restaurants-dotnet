@@ -22,7 +22,7 @@ namespace Restaurants.Applications.Restaurants.Commands.DeleteRestaurant
 
             if (restaurant is null)
             {
-                throw new NotFoundException($"Restaurant with Id {request.Id} not found.");
+                throw new NotFoundException(nameof(restaurant), request.Id.ToString());
             }
 
            await restaurantsRepository.DeleteRestaurant(restaurant);

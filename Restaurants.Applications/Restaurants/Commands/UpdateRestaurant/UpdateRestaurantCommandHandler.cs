@@ -21,7 +21,7 @@
             if (restaurant is null)
             {
                 logger.LogWarning("Restaurant with Id: {Id} not found", request.Id);
-                throw new NotFoundException($"Restaurant with Id {request.Id} not found.");
+                throw new NotFoundException(nameof(restaurant), request.Id.ToString());
             }
 
             // Update restaurant properties
