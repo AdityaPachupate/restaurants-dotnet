@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurants.Applications.Dishes.Commands
+namespace Restaurants.Applications.Dishes.Commands.CreateDish
 {
     public class CreateDishCommandValidator : AbstractValidator<CreateDishCommand>
     {

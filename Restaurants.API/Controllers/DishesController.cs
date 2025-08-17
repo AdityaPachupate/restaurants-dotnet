@@ -1,7 +1,12 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Restaurants.Applications.Dishes.Commands;
+using Restaurants.Applications.Dishes.Commands.CreateDish;
+using Restaurants.Applications.Dishes.Commands.DeleteAllDishForRestaurant;
+using Restaurants.Applications.Dishes.DTO;
+using Restaurants.Applications.Dishes.Queries.GetAllDishesForRestaurant;
+using Restaurants.Applications.Dishes.Queries.GetDishByIdForRestaurant;
+using Restaurants.Applications.Restaurants.Commands.DeleteRestaurant;
+using Restaurants.Applications.Dishes.Commands.DeleteDishByIdForRestaurant;
 
 namespace Restaurants.API.Controllers
 {
@@ -15,6 +20,34 @@ namespace Restaurants.API.Controllers
             createDishCommand.RestaurantId = restaurantId;
             await mediator.Send(createDishCommand);
             return Created();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DishDto>>> GetAllForRestaurant([FromRoute] int restaurantId)
+        {
+            var dishes = await mediator.Send(new GetAllDishesForRestaurantQuery(restaurantId));
+            return Ok(dishes);
+        }
+
+        [HttpGet("{DishId}")]
+        public async Task<ActionResult<DishDto>> GetDishByIdForRestaurant([FromRoute] int restaurantId , [FromRoute]int DishId)
+        {
+            var dish = await mediator.Send(new GetDishByIdForRestaurantQuery(restaurantId, DishId));
+            return Ok(dish);
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAllDishesForRestaurant([FromRoute] int restaurantId)
+        {
+            await mediator.Send(new DeleteAllDishForRestaurantCommand(restaurantId));
+            return NoContent();
+        }
+
+        [HttpDelete("{DishId}")]
+        public async Task<IActionResult> DeleteDishByIdForRestaurant([FromRoute] int restaurantId, [FromRoute] int DishId)
+        {
+            await mediator.Send(new DeleteDishByIdForRestaurantCommand(restaurantId, DishId));
+            return NoContent();
         }
     }
 }

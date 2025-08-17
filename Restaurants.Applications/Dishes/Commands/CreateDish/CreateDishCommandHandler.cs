@@ -1,4 +1,4 @@
-﻿namespace Restaurants.Applications.Dishes.Commands
+﻿namespace Restaurants.Applications.Dishes.Commands.CreateDish
 {
     using AutoMapper;
     using global::Restaurants.Domain.Entities;
