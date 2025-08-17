@@ -22,6 +22,21 @@ builder.Services.AddSwaggerGen(conf =>
         Scheme = "bearer",
     }
     );
+
+    conf.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "bearerAuth"
+                }
+            },
+            []
+        }
+    });
 });
 
 new CompactJsonFormatter();
