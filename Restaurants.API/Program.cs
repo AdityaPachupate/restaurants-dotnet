@@ -69,6 +69,7 @@ app.UseSerilogRequestLogging();
 
 app.UseHttpsRedirection();
 
+app.MapGroup("api/identity").MapIdentityApi<User>();
 app.MapIdentityApi<User>();
 
 app.UseAuthorization();
