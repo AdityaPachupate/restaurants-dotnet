@@ -28,7 +28,7 @@ namespace Restaurants.Applications.Dishes.Commands.DeleteDishByIdForRestaurant
             if (dish == null)
                 throw new NotFoundException("Dish", request.DishId.ToString());
 
-            await dishesRepository.DeleteAllDishAsync(dish);
+            await dishesRepository.DeleteDishAsync(dish);
 
             logger.LogInformation("Deleted Dish:{DishId} for restaurant:{restaurantId}", request.DishId, request.RestaurantId);
         }

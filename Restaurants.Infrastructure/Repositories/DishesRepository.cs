@@ -26,9 +26,15 @@ namespace Restaurants.Infrastructure.Repositories
                 .ToListAsync();
         }
 
-        public async Task DeleteAllDishAsync(Dish dish)
+        public async Task DeleteDishAsync(Dish dish)
         {
-            dbContext.Dishes.RemoveRange(dish);
+            dbContext.Dishes.Remove(dish);
+            await dbContext.SaveChangesAsync();
+        }
+
+        public async Task DeleteAllDishAsync(IEnumerable<Dish> dishes)
+        {
+            dbContext.Dishes.RemoveRange(dishes);
             await dbContext.SaveChangesAsync();
         }  
     }
