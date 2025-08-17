@@ -15,7 +15,7 @@ namespace Restaurants.Applications.Dishes.Commands.DeleteAllDishForRestaurant
     {
         public async Task Handle(DeleteAllDishForRestaurantCommand request, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Deleting all dishes for restaurant: {RestaurantId}", request.RestaurantId);
+            logger.LogWarning("Deleting all dishes for restaurant: {RestaurantId}", request.RestaurantId);
 
             var restaurant = await restaurantsRepository.GetRestaurantByIdAsync(request.RestaurantId);
 
@@ -25,11 +25,7 @@ namespace Restaurants.Applications.Dishes.Commands.DeleteAllDishForRestaurant
             if (restaurant.Dishes == null || !restaurant.Dishes.Any())
                 throw new NotFoundException(nameof(restaurant.Dishes), request.RestaurantId.ToString());
 
-            // Iterate over a copy to avoid modifying the collection while enumerating
-            foreach (var dish in restaurant.Dishes.ToList())
-            {
-                await dishesRepository.DeleteAllDishAsync(dish);
-            }
+            dishesRepository.DeleteAllDishAsync(restaurant.Dishes);
 
             logger.LogInformation("All dishes for restaurant {RestaurantId} have been deleted", request.RestaurantId);
 

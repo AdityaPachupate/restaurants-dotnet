@@ -6,6 +6,6 @@ namespace Restaurants.Domain.Repositories
     {
         Task<int> CreateDishAsync(Dish dishEntity);
         Task<List<Dish>> GetAllDishesForRestaurantAsync(int restaurantId);
-        Task DeleteAllDishAsync(Dish dish);
+        Task DeleteAllDishAsync(IEnumerable<Dish> dish);
     }
 }
