@@ -1,3 +1,4 @@
+using Microsoft.OpenApi.Models;
 using Restaurants.API.Middlewares;
 using Restaurants.Applications.Extensions;
 using Restaurants.Domain.Entities;
@@ -5,6 +6,7 @@ using Restaurants.Infrastructure.Extensions;
 using Restaurants.Infrastructure.Seeders;
 using Serilog;
 using Serilog.Formatting.Compact;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,7 +14,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(conf =>
+{
+    conf.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
+    {
+        Type = SecuritySchemeType.Http,
+        Scheme = "bearer",
+    }
+    );
+});
 
 new CompactJsonFormatter();
 
