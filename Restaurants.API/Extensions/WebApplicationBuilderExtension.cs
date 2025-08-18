@@ -12,7 +12,13 @@
         public static void AddPresentation(this WebApplicationBuilder builder)
         {
 
-            builder.Services.AddControllers();
+            builder.Services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.AllowTrailingCommas = true;
+                    options.JsonSerializerOptions.PropertyNameCaseInsensitive = true;
+                    options.JsonSerializerOptions.PropertyNamingPolicy = null;
+                });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen(conf =>
             {
@@ -45,7 +51,7 @@
             builder.Services.AddApplication();
             builder.Services.AddScoped<ErrorHandlingMiddleware>();
             builder.Services.AddScoped<RequestTimeLoggingMiddleware>();
-
+            builder.Services.AddAuthentication();
             builder.Host.UseSerilog((Context, configuration) => configuration.ReadFrom.Configuration(Context.Configuration));
         }
     }

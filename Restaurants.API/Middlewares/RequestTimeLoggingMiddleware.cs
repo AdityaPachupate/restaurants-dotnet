@@ -12,7 +12,7 @@
 
             if (stopWatch.ElapsedMilliseconds / 1000 > 4)
             {
-                logger.LogInformation("Request {{Verb}} at {{Path}} took {{ElapsedMilliseconds}} ms",
+                logger.LogInformation("Request {Verb} at {Path} took {ElapsedMilliseconds} ms",
                     context.Request.Method,
                     context.Request.Path,
                     stopWatch.ElapsedMilliseconds);

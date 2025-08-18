@@ -2,6 +2,7 @@
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 using Restaurants.Applications.Restaurants;
+using Restaurants.Applications.User;
 //using Restaurants.Applications.Restaurants.Validators;
 
 
@@ -15,6 +16,8 @@ namespace Restaurants.Applications.Extensions
             services.AddAutoMapper(applicationAssembly);
             services.AddValidatorsFromAssembly(applicationAssembly).AddFluentValidationAutoValidation();
             services.AddMediatR(conf => conf.RegisterServicesFromAssembly(applicationAssembly));
+            services.AddScoped<IUserContext, User.UserContext>();
+            services.AddHttpContextAccessor();
 
         }
     }

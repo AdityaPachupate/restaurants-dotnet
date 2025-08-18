@@ -1,6 +1,7 @@
 ﻿namespace Restaurants.API.Controllers
 {
     using MediatR;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
     using Restaurants.Applications.Restaurants.Commands.CreateRestaurants;
     using Restaurants.Applications.Restaurants.Commands.DeleteRestaurant;
@@ -10,9 +11,11 @@
 
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize]
     public class RestaurantsController(IMediator mediator) : ControllerBase
     {
         [HttpGet]
+        [AllowAnonymous] // Allow anonymous access to this endpoint
         public async Task<IActionResult> GetRestaurants()
         {
             var restaurants = await mediator.Send(new GetAllRestaurantsQuery());

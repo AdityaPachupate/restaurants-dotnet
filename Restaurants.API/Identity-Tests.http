@@ -1,0 +1,31 @@
+@Restaurants.API_HostAddress = https://localhost:7168
+
+### Register a new user
+POST {{Restaurants.API_HostAddress}}/api/identity/register
+Content-Type: application/json
+
+{
+  "email": "example@email.com",
+  "password": "Example@123"
+}
+
+### Login with the registered user
+POST {{Restaurants.API_HostAddress}}/api/identity/login
+Content-Type: application/json
+
+{
+  "email": "example@email.com",
+  "password": "Example@123"
+}
+
+### Get user info (requires authentication)
+GET {{Restaurants.API_HostAddress}}/api/identity/manage/info
+Authorization: Bearer {{auth_token}}
+
+### Refresh token
+POST {{Restaurants.API_HostAddress}}/api/identity/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{refresh_token}}"
+} 
