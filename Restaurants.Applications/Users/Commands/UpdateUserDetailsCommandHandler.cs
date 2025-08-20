@@ -16,6 +16,7 @@
         public async Task Handle(UpdateUserDetailsCommand request, CancellationToken cancellationToken)
         {
             var user = userContext.GetCurrentUser();
+           
             logger.LogInformation("Updating user details for user {UserId} with {@Request}", user!.Id, request);
 
             var dbUser = await userStore.FindByIdAsync(user.Id, cancellationToken);
