@@ -17,14 +17,14 @@
         {
             var id = await GenerateClaimsAsync(user);
 
-            if(user.Natinality != null)
+            if(user.Nationality != null)
             {
-                id.AddClaim(new Claim("Natinality", user.Natinality));
+                id.AddClaim(new Claim(AppClaimTypes.Nationality, user.Nationality));
             }
 
             if (user.DateOfBirth != null)
             {
-                id.AddClaim(new Claim("DateOfBirth", user.DateOfBirth.Value.ToString("yyyy-MM-dd")));
+                id.AddClaim(new Claim(AppClaimTypes.DateOfBirth, user.DateOfBirth.Value.ToString("yyyy-MM-dd")));
             }
 
             return new ClaimsPrincipal(id);

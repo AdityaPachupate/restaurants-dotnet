@@ -24,7 +24,7 @@
             if (dbUser == null)
                 throw new NotFoundException(nameof(User),user!.Id);
 
-            dbUser.Natinality = request.Natinality;
+            dbUser.Nationality = request.Natinality;
             dbUser.DateOfBirth = request.DateOfBirth;
 
             await userStore.UpdateAsync(dbUser, cancellationToken);
