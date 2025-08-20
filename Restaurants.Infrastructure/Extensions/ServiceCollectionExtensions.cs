@@ -6,6 +6,7 @@ using Restaurants.Infrastructure.Seeders;
 using Restaurants.Infrastructure.Repositories;
 using Restaurants.Domain.Repositories;
 using Restaurants.Domain.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Restaurants.Infrastructure.Extensions;
 
@@ -20,15 +21,8 @@ public static class ServiceCollectionExtensions
         
         );
 
-        services.AddIdentityApiEndpoints<User>(options =>
-        {
-            options.SignIn.RequireConfirmedAccount = false;
-            options.Password.RequireDigit = true;
-            options.Password.RequireLowercase = true;
-            options.Password.RequireUppercase = true;
-            options.Password.RequireNonAlphanumeric = true;
-            options.Password.RequiredLength = 6;
-        })
+        services.AddIdentityApiEndpoints<User>()
+        .AddRoles<IdentityRole>()
         .AddEntityFrameworkStores<RestaurantsDbContext>();
 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
