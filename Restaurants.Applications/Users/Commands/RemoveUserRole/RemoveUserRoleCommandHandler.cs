@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 namespace Restaurants.Applications.Users.Commands.RemoveUserRole
 {
     public class RemoveUserRoleCommandHandler(
-            ILogger logger,
+            ILogger<RemoveUserRoleCommandHandler> logger,
             UserManager<Domain.Entities.User> userManager,
             RoleManager<IdentityRole> roleManager
         ) 

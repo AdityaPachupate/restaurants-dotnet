@@ -27,9 +27,13 @@ public static class ServiceCollectionExtensions
         .AddClaimsPrincipalFactory<RestaurantsUserClaimPrincipalFactory>()
         .AddEntityFrameworkStores<RestaurantsDbContext>();
 
+        services.AddAuthorizationBuilder()
+            .AddPolicy("HasNationality", builder => builder.RequireClaim("Natinality"));
+
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
         services.AddScoped<IDishesRepository, DishesRepository>();
+       
     }
 
 }

@@ -24,6 +24,7 @@
         }
 
         [HttpGet("{id}")]
+        [Authorize(Policy = "HasNationality")]
         public async Task<IActionResult> GetRestaurantsById([FromRoute] int id)
         {
             var restaurant = await mediator.Send(new GetRestaurantByIdQuery(id));
