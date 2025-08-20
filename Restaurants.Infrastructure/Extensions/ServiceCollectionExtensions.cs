@@ -28,7 +28,7 @@ public static class ServiceCollectionExtensions
         .AddEntityFrameworkStores<RestaurantsDbContext>();
 
         services.AddAuthorizationBuilder()
-            .AddPolicy("HasNationality", builder => builder.RequireClaim("Natinality"));
+            .AddPolicy("HasNationality", builder => builder.RequireClaim("Natinality","Indian","German"));
 
         services.AddScoped<IRestaurantSeeder, RestaurantSeeder>();
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
