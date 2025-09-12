@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.Extensions.Logging;
 using Restaurants.Domain.Exceptions;
+using Restaurants.Domain.Interfaces;
 using Restaurants.Domain.Repositories;
 
 namespace Restaurants.Applications.Dishes.Commands.DeleteDishByIdForRestaurant
@@ -8,7 +9,8 @@ namespace Restaurants.Applications.Dishes.Commands.DeleteDishByIdForRestaurant
     public class DeleteDishByIdForRestaurantCommandHandler(
             ILogger<DeleteDishByIdForRestaurantCommandHandler> logger,
             IDishesRepository dishesRepository,
-            IRestaurantsRepository restaurantsRepository
+            IRestaurantsRepository restaurantsRepository,
+            IRestaurantAuthorizationService restaurantAuthorizationService
 
         ) : IRequestHandler<DeleteDishByIdForRestaurantCommand>
     {
@@ -27,6 +29,11 @@ namespace Restaurants.Applications.Dishes.Commands.DeleteDishByIdForRestaurant
             var dish = restaurant.Dishes.FirstOrDefault(d => d.Id == request.DishId);
             if (dish == null)
                 throw new NotFoundException("Dish", request.DishId.ToString());
+
+            if (!restaurantAuthorizationService.Authorize(restaurant, Domain.Constants.ResourceOperation.Update))
+            {
+                throw new ForbiddenException();
+            }
 
             await dishesRepository.DeleteDishAsync(dish);
 

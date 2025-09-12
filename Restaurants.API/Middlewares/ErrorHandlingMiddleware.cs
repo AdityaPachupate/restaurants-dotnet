@@ -19,6 +19,11 @@ namespace Restaurants.API.Middlewares
                 await context.Response.WriteAsync(notFound.Message);
                 logger.LogWarning(notFound.Message);
             }
+            catch (ForbiddenException)
+            {
+                context.Response.StatusCode = StatusCodes.Status403Forbidden;
+                await context.Response.WriteAsync("Access forbidden");
+            }
             catch(Exception ex)
             {
                 logger.LogError(ex, ex.Message);

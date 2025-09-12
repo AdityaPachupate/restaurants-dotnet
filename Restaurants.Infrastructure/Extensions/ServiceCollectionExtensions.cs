@@ -4,12 +4,14 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Restaurants.Infrastructure.Seeders;
 using Restaurants.Infrastructure.Repositories;
-using Restaurants.Domain.Repositories;
+using Restaurants.Domain.Repositories;  
 using Restaurants.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Restaurants.Infrastructure.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Restaurants.Infrastructure.Authorization.Requirements;
+using Restaurants.Infrastructure.Authorization.Services;
+using Restaurants.Domain.Interfaces;
 
 namespace Restaurants.Infrastructure.Extensions;
 
@@ -45,7 +47,7 @@ public static class ServiceCollectionExtensions
         services.AddScoped<IRestaurantsRepository, RestaurantsRepository>();
         services.AddScoped<IDishesRepository, DishesRepository>();
         services.AddScoped<IAuthorizationHandler, MinimumAgeRequirementsHandler>();
-       
+        services.AddScoped<IRestaurantAuthorizationService, RestaurantAuthorizationService>();
     }
 
 }

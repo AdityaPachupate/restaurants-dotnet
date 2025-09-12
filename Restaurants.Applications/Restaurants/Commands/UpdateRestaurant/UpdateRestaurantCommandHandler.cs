@@ -2,6 +2,7 @@
 {
     using AutoMapper;
     using global::Restaurants.Domain.Exceptions;
+    using global::Restaurants.Domain.Interfaces;
     using global::Restaurants.Domain.Repositories;
     using MediatR;
     using Microsoft.Extensions.Logging;
@@ -10,6 +11,7 @@
     public class UpdateRestaurantCommandHandler(
         ILogger<UpdateRestaurantCommandHandler> logger,
         IRestaurantsRepository restaurantRepository,
+        IRestaurantAuthorizationService restaurantAuthorizationService,
         IMapper mapper
         )
         : IRequestHandler<UpdateRestaurantCommand>
@@ -22,6 +24,11 @@
             {
                 logger.LogWarning("Restaurant with Id: {Id} not found", request.Id);
                 throw new NotFoundException(nameof(restaurant), request.Id.ToString());
+            }
+
+            if (!restaurantAuthorizationService.Authorize(restaurant, Domain.Constants.ResourceOperation.Update))
+            {
+                throw new ForbiddenException();
             }
 
             // Update restaurant properties
