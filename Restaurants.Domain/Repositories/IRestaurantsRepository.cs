@@ -6,6 +6,7 @@ namespace Restaurants.Domain.Repositories
     public interface IRestaurantsRepository
     {
          Task<IEnumerable<Restaurant>> GetAllRestaurantsAsync();
+        Task<IEnumerable<Restaurant>> GetAllMatchingRestaurantsAsync(string? searchPhrase ,int pageNumber,int pageSize);
          Task<Restaurant?> GetRestaurantByIdAsync(int id);
         Task<int> CreateRestaurant(Restaurant restaurant);
         

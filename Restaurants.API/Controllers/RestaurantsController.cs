@@ -18,9 +18,9 @@
     {
         [HttpGet]
         [AllowAnonymous] // Allow anonymous access to this endpoint
-        public async Task<IActionResult> GetRestaurants()
+        public async Task<IActionResult> GetRestaurants([FromQuery] GetAllRestaurantsQuery query)
         {
-            var restaurants = await mediator.Send(new GetAllRestaurantsQuery());
+            var restaurants = await mediator.Send(query);
             return Ok(restaurants);
         }
 

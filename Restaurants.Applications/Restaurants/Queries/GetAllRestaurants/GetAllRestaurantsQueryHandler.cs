@@ -14,9 +14,10 @@ namespace Restaurants.Applications.Restaurants.Queries.GetAllRestaurants
             CancellationToken cancellationToken)
         {
             logger.LogInformation("Fetching all restaurants from the repository.");
-            var restaurants = await restaurantsRepository.GetAllRestaurantsAsync();
+            var restaurants = await restaurantsRepository.GetAllMatchingRestaurantsAsync(request.searchPhrase,request.pageNumber,request.pageSize);
             var restaurantsDtos = mapper.Map<IEnumerable<RestaurantDto>>(restaurants);
             return restaurantsDtos;
         }
     }
 }
+ 
