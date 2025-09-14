@@ -1,13 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using Restaurants.Domain.Constants;
 using Restaurants.Domain.Entities;
 using Restaurants.Domain.Repositories;
 using Restaurants.Infrastructure.Persistance;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Linq.Expressions;
 
 namespace Restaurants.Infrastructure.Repositories
 {
@@ -29,7 +25,7 @@ namespace Restaurants.Infrastructure.Repositories
             return restaurants;
         }
 
-        public async Task<(IEnumerable<Restaurant>,int)> GetAllMatchingRestaurantsAsync(string? searchPhrase,int pageNumber,int pageSize)
+        public async Task<(IEnumerable<Restaurant>,int)> GetAllMatchingRestaurantsAsync(string? searchPhrase,int pageNumber,int pageSize , string?sortBy,SortDirection sortDirection)
         {
             var searchPhraseToLower = searchPhrase?.ToLower();
 
@@ -39,6 +35,23 @@ namespace Restaurants.Infrastructure.Repositories
                 .Where(r => searchPhraseToLower == null || r.Name.ToLower().Contains(searchPhraseToLower) || r.Description.ToLower().Contains(searchPhraseToLower));
 
             var totalCount = await baseQuery.CountAsync();
+
+
+            if (sortBy!=null)
+            {
+                var columnSelector = new Dictionary<string , Expression<Func<Restaurant, object>>>
+                {
+                    { nameof(Restaurant.Name), r => r.Name },
+                    { nameof(Restaurant.Description), r => r.Description },
+                    { nameof(Restaurant.Category), r => r.Category }
+                };
+
+                var selectedColumn = columnSelector[sortBy];
+
+                baseQuery = sortDirection == SortDirection.Ascending
+                    ? baseQuery.OrderBy(selectedColumn)
+                    : baseQuery.OrderByDescending(selectedColumn);
+            }
 
             var restaurants = await baseQuery
                 .Skip(pageSize * (pageNumber - 1))
