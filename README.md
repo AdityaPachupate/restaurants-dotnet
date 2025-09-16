@@ -1,74 +1,75 @@
+# Restaurants API
 
-# 🔑 Why Do We Need Swagger JWT Configuration?
+This is a .NET 8.0 web API for managing restaurants, following the principles of Clean Architecture.
 
-## 📌 What is Swagger?
-[Swagger](https://swagger.io/) (via **Swashbuckle** in .NET) is a tool that:
-- Automatically generates API documentation.
-- Provides a **UI** (`/swagger`) where you can test APIs directly in the browser.
+## Project Structure
 
----
+- `src/Restaurants.API`: The main API project. This is the entry point of the application.
+- `src/Restaurants.Application`: Contains the application logic. This layer is responsible for the application's behavior and policies.
+- `src/Restaurants.Domain`: Contains enterprise logic and types. This is the core layer of the application.
+- `src/Restaurants.Infrastructure`: Contains infrastructure-related code such as database and file system interactions. This layer supports the higher layers.
+- `tests/Restaurants.API.Tests`: Contains unit tests for the API.
 
-## ⚠️ The Problem
-Your API uses **JWT Bearer Authentication** (because you set up Identity).
 
-- Endpoints expect a **JWT token** in the `Authorization` header.
-- By default, Swagger does **not** know that your API expects tokens.
-- Result: When you try endpoints in Swagger UI, they fail with **401 Unauthorized** unless you manually add headers.
+## Packages and Libraries
 
----
+This project uses several NuGet packages and libraries to achieve its functionality:
 
-## 🛠️ The Solution
+- **Serilog**: This library is used for logging. It provides a flexible and easy-to-use logging API.
 
-### 1. Add a Security Definition
-```csharp
-conf.AddSecurityDefinition("bearerAuth", new OpenApiSecurityScheme
-{
-    Type = SecuritySchemeType.Http,
-    Scheme = "bearer",
-});
-```
-This tells Swagger:  
-👉 “My API uses **Bearer tokens**. Show an **Authorize** button in Swagger UI.”
+- **MediatR**: This library is used to implement the Command Query Responsibility Segregation (CQRS) pattern. In this solution, commands (which change the state of the system) and queries (which read the state) are separated for clarity and ease of development.
 
-✅ After this, Swagger UI displays a 🔒 **Authorize** button where you can paste a JWT token.
+- **Entity Framework**: This is an open-source ORM framework for .NET. It enables developers to work with data using objects of domain-specific classes without focusing on the underlying database tables and columns where this data is stored.
 
----
+- **Azure Storage Account**: This service is used for handling blobs. Blobs, or Binary Large Objects, are a type of data that can hold large amounts of unstructured data such as text or binary data, including images, documents, streaming media, and archive data.
 
-### 2. Add a Security Requirement
-```csharp
-conf.AddSecurityRequirement(new OpenApiSecurityRequirement
-{
-    {
-        new OpenApiSecurityScheme
-        {
-            Reference = new OpenApiReference
-            {
-                Type = ReferenceType.SecurityScheme,
-                Id = "bearerAuth"
-            }
-        },
-        []
-    }
-});
-```
-This tells Swagger:  
-👉 “Require the **bearerAuth** scheme for all endpoints.”
+- **Microsoft Identity Package**: This package is used for handling user identity in the web API. It provides features such as authentication, authorization, identity, and user access control.
 
-✅ Once you paste a token, Swagger automatically attaches it to **all API requests**.  
-✅ No need to manually add the header for each call.
+Please refer to the official documentation of each package for more details and usage examples.
 
----
+## Getting Started
 
-## 🎯 End Result
-- Swagger UI shows an **Authorize button**.  
-- You enter a JWT token once (e.g., `Bearer eyJhbGciOi...`).  
-- All secured endpoints automatically include that token in the request.  
-- You can test authenticated APIs directly inside Swagger without needing Postman or Curl.
+### Prerequisites
 
----
+- .NET 8.0
+- Visual Studio 2022 or later
 
-## ✅ In Short
-We add this configuration so Swagger:
-1. **Knows about JWT authentication**.  
-2. **Provides an easy way** to paste a token.  
-3. **Applies the token globally** to all secured endpoints.  
+### Building
+
+To build the project, open the `Restaurants.sln` file in Visual Studio and build the solution.
+
+### Running
+
+To run the project, set `Restaurants.API` as the startup project in Visual Studio and start the application.
+
+## API Endpoints
+
+1. `GET /api/restaurants`
+   - Parameters: `searchPhrase`, `pageSize`, `pageNumber`, `sortBy`, `sortDirection`
+   - Authorization Bearer token
+
+2. `GET /api/restaurants/{id}`
+   - Parameters: `id`
+   - Authorization: Bearer token
+
+3. `GET /api/restaurants/{id}/dishes`
+   - Parameters: `id`
+   - Authorization: Bearer token
+
+4. `DELETE /api/restaurants/{id}/dishes`
+   - Parameters: `id`
+
+5. `GET /api/restaurants/{id}/dishes/{dishId}`
+   - Parameters: `id`, `dishId`
+
+6. `DELETE /api/restaurants/{id}`
+   - Parameters: `id`
+   - Authorization: Bearer token
+
+7. `POST /api/restaurants`
+   - Body: JSON object with properties `Name`, `Description`, `Category`, `HasDelivery`, `ContactEmail`, `ContactNumber`, `City`, `Street`
+   - Authorization: Bearer token
+
+
+
+ 
